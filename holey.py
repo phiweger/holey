@@ -365,19 +365,22 @@ class holey:
         current_rectangle = None
         while current_tries < num_tries:
 
+
             current_rectangle = self.make_rectangle_monte_carlo()
 
+            # size filter
+            if current_rectangle.volume < size_threshold:
+                current_tries += 1
+                continue
+
+            # new max, add to result and reset tries
             if current_rectangle.volume > max_volume_found:
-                # new hit, append and reset
                 max_volume_found = current_rectangle.volume
                 rectangle_list.append(current_rectangle)
                 current_tries = 0
 
             else:
-                # count failed try if below size threshold
-                if current_rectangle.volume < size_threshold:
-                    current_tries += 1
-
+                current_tries += 1
 
         return rectangle_list
 
